@@ -52,15 +52,15 @@ export const facebookShareConfig = {
   /**
    * 分享图片 MIME 类型。
    */
-  imageType: 'image/webp',
+  imageType: 'image/png',
 
   /**
    * 分享图片尺寸。
    *
    * `og:image:width` 和 `og:image:height` 可以帮助 Facebook 更快确定预览图比例。
    */
-  imageWidth: '3600',
-  imageHeight: '1890',
+  imageWidth: '1200',
+  imageHeight: '630',
 
   /**
    * 分享图片的替代文本。
