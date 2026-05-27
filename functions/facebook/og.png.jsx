@@ -74,6 +74,9 @@ export async function onRequest({ request }) {
       fonts: fontData
         ? [{ name: 'Poppins', data: fontData, weight: 900, style: 'normal' }]
         : undefined,
+      headers: {
+        'cache-control': 'public, max-age=60',
+      },
     },
   )
 }

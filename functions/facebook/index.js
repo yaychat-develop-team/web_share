@@ -30,7 +30,12 @@ export function onRequest({ request }) {
   }
 
   const pageUrl = `${siteUrl}/facebook${queryString}`
-  const imageUrl = `${siteUrl}/facebook/og.png${queryString}`
+  const imageUrl = new URL('/facebook/og.png', siteUrl)
+
+  url.searchParams.forEach((value, key) => {
+    imageUrl.searchParams.append(key, value)
+  })
+  imageUrl.searchParams.set('v', '20260527-coin-bg-v2')
 
   return new Response(`<!doctype html>
 <html lang="zh-CN">
@@ -42,8 +47,8 @@ export function onRequest({ request }) {
   <meta property="og:type" content="website">
   <meta property="og:title" content="${escapeHtml(meta.title)}">
   <meta property="og:description" content="${escapeHtml(meta.description)}">
-  <meta property="og:image" content="${escapeHtml(imageUrl)}">
-  <meta property="og:image:secure_url" content="${escapeHtml(imageUrl)}">
+  <meta property="og:image" content="${escapeHtml(imageUrl.href)}">
+  <meta property="og:image:secure_url" content="${escapeHtml(imageUrl.href)}">
   <meta property="og:image:type" content="image/png">
   <meta property="og:image:width" content="1200">
   <meta property="og:image:height" content="630">
@@ -55,7 +60,7 @@ export function onRequest({ request }) {
   <main>
     <h1>${escapeHtml(meta.title)}</h1>
     <p>${escapeHtml(meta.description)}</p>
-    <img src="${escapeHtml(imageUrl)}" alt="${escapeHtml(meta.title)}" width="1200" height="630">
+    <img src="${escapeHtml(imageUrl.href)}" alt="${escapeHtml(meta.title)}" width="1200" height="630">
     <p><a href="${escapeHtml(landingUrl.href)}">Open landing page</a></p>
   </main>
   <script>
