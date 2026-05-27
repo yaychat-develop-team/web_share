@@ -22,6 +22,12 @@ const routes: RouteRecordRaw[] = [
     meta: { title: 'Facebook Share' },
   },
   {
+    path: '/landing',
+    name: 'Landing',
+    component: () => import('@/views/Landing.vue'),
+    meta: { title: 'Landing' },
+  },
+  {
     path: '/:pathMatch(.*)*',
     name: 'NotFound',
     component: () => import('@/views/NotFound.vue'),

@@ -29,8 +29,14 @@ export function onRequest({ request }) {
   const queryString = url.search
   const meta = getShareMeta(url.searchParams)
   const siteUrl = url.origin
+  const code = url.searchParams.get('code') || ''
+  const landingUrl = new URL('/landing', siteUrl)
 
-  const pageUrl = `${siteUrl}/facebook${queryString}`
+  if (code) {
+    landingUrl.searchParams.set('code', code)
+  }
+
+  const pageUrl = landingUrl.href
   const imageUrl = `${siteUrl}/facebook/og.png${queryString}`
 
   return new Response(`<!doctype html>
@@ -57,6 +63,7 @@ export function onRequest({ request }) {
     <h1>${escapeHtml(meta.title)}</h1>
     <p>${escapeHtml(meta.description)}</p>
     <img src="${escapeHtml(imageUrl)}" alt="${escapeHtml(meta.title)}" width="1200" height="630">
+    <p><a href="${escapeHtml(pageUrl)}">Open landing page</a></p>
   </main>
 </body>
 </html>`, {
