@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no, viewport-fit=cover" />
+    <meta name="format-detection" content="telephone=no, email=no" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+    <!--
+      Facebook 分享抓取说明：
+      Facebook 爬虫主要读取 URL 首次返回的 HTML，因此 Open Graph 标签要尽量
+      直接出现在 HTML 中。下面这组是默认分享信息；如果未来要按不同分享 URL
+      输出不同标题、描述或图片，应改为 SSR、预渲染或服务端模板输出。
+    -->
+    <!-- 页面普通描述，兼容搜索引擎和非 Facebook 平台。 -->
+    <meta name="description" content="Share page prepared for Facebook Open Graph preview." />
+    <!-- og:url 必须是稳定、绝对、可公网访问的分享 URL；上线后请替换为生产域名。 -->
+    <meta property="og:url" content="https://facebook-share-e55.pages.dev/facebook" />
+    <!-- 普通 H5 分享页使用 website；文章详情页可改为 article。 -->
+    <meta property="og:type" content="website" />
+    <!-- Facebook 分享卡片标题。 -->
+    <meta property="og:title" content="Facebook Share" />
+    <!-- Facebook 分享卡片描述。 -->
+    <meta property="og:description" content="Share page prepared for Facebook Open Graph preview." />
+    <!-- 分享主图建议 1200 x 630，且生产环境应使用绝对 HTTPS URL。 -->
+    <meta property="og:image" content="https://facebook-share-e55.pages.dev/share/facebook-share.png" />
+    <!-- HTTPS 图片可设置 secure_url；本地相对路径仅用于开发占位。 -->
+    <meta property="og:image:secure_url" content="https://facebook-share-e55.pages.dev/share/facebook-share.png" />
+    <!-- 图片类型；如果替换为 jpg/png/webp，需要同步调整。 -->
+    <meta property="og:image:type" content="image/png" />
+    <!-- 图片尺寸帮助 Facebook 更快生成稳定预览。 -->
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <!-- 图片替代文本，用于无障碍和素材语义说明。 -->
+    <meta property="og:image:alt" content="Facebook Share preview image" />
+    <!-- 页面语言区域。 -->
+    <meta property="og:locale" content="en_US" />
+    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
+    <title>%VITE_APP_TITLE%</title>
+  </head>
+  <body>
+    <div id="app"></div>
+    <script type="module" src="/src/main.ts"></script>
+  </body>
+</html>

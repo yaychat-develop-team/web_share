@@ -1,0 +1,43 @@
+// 主题色
+$color-primary: #ff6b35;
+$color-primary-light: #ff8f66;
+$color-primary-dark: #e55a2b;
+
+// 文字颜色
+$color-text: #333333;
+$color-text-secondary: #666666;
+$color-text-placeholder: #999999;
+$color-text-disabled: #cccccc;
+
+// 背景颜色
+$color-bg: #f5f5f5;
+$color-bg-white: #ffffff;
+$color-bg-mask: rgba(0, 0, 0, 0.5);
+
+// 边框
+$color-border: #eeeeee;
+
+// 间距
+$spacing-xs: 4px;
+$spacing-sm: 8px;
+$spacing-md: 12px;
+$spacing-lg: 16px;
+$spacing-xl: 24px;
+
+// 字号
+$font-xs: 10px;
+$font-sm: 12px;
+$font-md: 14px;
+$font-lg: 16px;
+$font-xl: 18px;
+$font-xxl: 24px;
+
+// 圆角
+$radius-sm: 4px;
+$radius-md: 8px;
+$radius-lg: 12px;
+$radius-round: 999px;
+
+// 安全区域
+$safe-area-top: env(safe-area-inset-top);
+$safe-area-bottom: env(safe-area-inset-bottom);
