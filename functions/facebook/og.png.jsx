@@ -39,36 +39,25 @@ export async function onRequest({ request }) {
         }}
       />
       {coin ? (
-        <svg
-          width="900"
-          height="130"
-          viewBox="0 0 900 130"
+        <div
           style={{
             position: 'absolute',
             top: 138,
             left: 97,
+            display: 'flex',
+            alignItems: 'center',
+            fontFamily: 'Poppins',
+            fontWeight: 900,
+            fontSize: 98,
+            lineHeight: 1,
+            color: '#FDE42B',
+            letterSpacing: '-0.02em',
+            // Satori 不支持 SVG <text>；用 div + 字体描边近似原渐变描边样式
+            WebkitTextStroke: '6px #000000',
           }}
         >
-          <defs>
-            <linearGradient id="coinGradient" x1="0" y1="0" x2="0" y2="130" gradientUnits="userSpaceOnUse">
-              <stop offset="26.98%" stopColor="#F1FF4B" />
-              <stop offset="73.02%" stopColor="#FDE42B" />
-            </linearGradient>
-          </defs>
-          <text
-            x="0"
-            y="98"
-            fill="url(#coinGradient)"
-            stroke="#000000"
-            strokeWidth="6"
-            paintOrder="stroke"
-            fontFamily="Poppins"
-            fontSize="98"
-            fontWeight="900"
-          >
-            {coin}
-          </text>
-        </svg>
+          {coin}
+        </div>
       ) : null}
     </div>,
     {
