@@ -8,18 +8,11 @@ function escapeHtml(value) {
 }
 
 function getShareMeta(searchParams) {
-  const entries = Object.fromEntries(searchParams)
-  const pairs = Object.entries(entries)
-
-  if (pairs.length === 0) {
-    return {
-      title: 'Facebook Share',
-      description: 'Share page prepared for Facebook Open Graph preview.',
-    }
-  }
-
-  const title = pairs.map(([k, v]) => `${k}: ${v}`).join('  |  ')
-  const description = pairs.map(([k, v]) => `${k}=${v}`).join('&')
+  const title = searchParams.get('text') || 'Facebook Share'
+  const coin = searchParams.get('coin') || ''
+  const description = coin
+    ? `Coin amount: ${coin}`
+    : 'Share page prepared for Facebook Open Graph preview.'
 
   return { title, description }
 }
@@ -29,7 +22,7 @@ export function onRequest({ request }) {
   const queryString = url.search
   const meta = getShareMeta(url.searchParams)
   const siteUrl = url.origin
-  const code = url.searchParams.get('code') || ''
+  const code = url.searchParams.get('inviteCode') || ''
   const landingUrl = new URL('/landing', siteUrl)
 
   if (code) {
