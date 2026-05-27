@@ -12,8 +12,8 @@
     "build:prod": "vue-tsc --build && vite build --mode production",
     "type-check": "vue-tsc --build",
     "preview": "vite preview",
-    "preview:pages": "pnpm run build:test && wrangler pages dev dist",
-    "preview:pages:prod": "pnpm run build:prod && wrangler pages dev dist"
+    "preview:pages": "pnpm run build:test && npx wrangler pages dev dist",
+    "preview:pages:prod": "pnpm run build:prod && npx wrangler pages dev dist"
   },
   "dependencies": {
     "@cloudflare/pages-plugin-vercel-og": "^0.1.2",

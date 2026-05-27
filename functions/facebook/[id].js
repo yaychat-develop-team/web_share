@@ -41,9 +41,9 @@ export function onRequest({ params }) {
   <meta property="og:description" content="${escapeHtml(meta.description)}">
   <meta property="og:image" content="${escapeHtml(meta.image)}">
   <meta property="og:image:secure_url" content="${escapeHtml(meta.image)}">
-  <meta property="og:image:type" content="image/png">
-  <meta property="og:image:width" content="1200">
-  <meta property="og:image:height" content="630">
+  <meta property="og:image:type" content="image/webp">
+  <meta property="og:image:width" content="3600">
+  <meta property="og:image:height" content="1890">
   <meta property="og:image:alt" content="${escapeHtml(meta.title)}">
   <meta property="og:locale" content="zh_CN">
   <title>${escapeHtml(meta.title)}</title>

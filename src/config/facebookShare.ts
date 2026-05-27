@@ -16,7 +16,7 @@ function toAbsoluteUrl(pathOrUrl: string) {
  */
 const activeShareId = new URLSearchParams(window.location.search).get('id')
 const activeShareItem = getFacebookShareItem(activeShareId)
-const defaultShareImage = toAbsoluteUrl(import.meta.env.VITE_FACEBOOK_SHARE_IMAGE || 'share/facebook-share.png')
+const defaultShareImage = toAbsoluteUrl(import.meta.env.VITE_FACEBOOK_SHARE_IMAGE || 'share/facebook-share.webp')
 const activeShareUrl = activeShareId ? `facebook/${encodeURIComponent(activeShareId)}` : ''
 const activeShareImageVersion = encodeURIComponent(activeShareItem?.updatedAt || 'default')
 
@@ -60,15 +60,15 @@ export const facebookShareConfig = {
   /**
    * 分享图片 MIME 类型。
    */
-  imageType: 'image/png',
+  imageType: 'image/webp',
 
   /**
    * 分享图片尺寸。
    *
    * `og:image:width` 和 `og:image:height` 可以帮助 Facebook 更快确定预览图比例。
    */
-  imageWidth: '1200',
-  imageHeight: '630',
+  imageWidth: '3600',
+  imageHeight: '1890',
 
   /**
    * 分享图片的替代文本。
