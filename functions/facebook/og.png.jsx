@@ -14,7 +14,10 @@ export async function onRequest({ request }) {
   const backgroundImage = new URL('/share/facebook-share.webp', request.url).href
   const fontData = await loadPoppinsBlack(request)
 
-  return new ImageResponse(
+  // ImageResponse 使用异步 ReadableStream。在 Cloudflare 边缘上，未命中缓存时
+  // 有可能在流尚未 enqueue 之前就把响应交给 CDN，导致 Facebook 等爬虫收到 0 字节
+  // 的 “PNG”（调试工具报图片损坏）。先 arrayBuffer() 再返回可保证 body 完整。
+  const imageResponse = new ImageResponse(
     <div
       style={{
         position: 'relative',
@@ -79,4 +82,14 @@ export async function onRequest({ request }) {
       },
     },
   )
+
+  const png = await imageResponse.arrayBuffer()
+  return new Response(png, {
+    status: imageResponse.status,
+    statusText: imageResponse.statusText,
+    headers: {
+      'content-type': 'image/png',
+      'cache-control': 'public, max-age=60',
+    },
+  })
 }
