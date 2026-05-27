@@ -8,26 +8,34 @@ async function loadPoppinsBlack(request) {
   return response.arrayBuffer()
 }
 
+/**
+ * Workers 上对超大数组做 String.fromCharCode(...chunk) 会参数过多导致运行时异常（1101）。
+ * 改用 apply + 小段切片。
+ */
 function arrayBufferToBase64(buffer) {
-  let binary = ''
   const bytes = new Uint8Array(buffer)
-  const chunkSize = 0x8000
+  let binary = ''
+  const chunkSize = 4096
 
   for (let i = 0; i < bytes.length; i += chunkSize) {
     const chunk = bytes.subarray(i, i + chunkSize)
-    binary += String.fromCharCode(...chunk)
+    binary += String.fromCharCode.apply(null, chunk)
   }
 
   return btoa(binary)
 }
 
 async function loadBackgroundImage(request) {
-  const imageUrl = new URL('/share/facebook-share.webp', request.url)
-  const response = await fetch(imageUrl)
-  if (!response.ok) return null
+  try {
+    const imageUrl = new URL('/share/facebook-share.webp', request.url)
+    const response = await fetch(imageUrl)
+    if (!response.ok) return null
 
-  const imageBuffer = await response.arrayBuffer()
-  return `data:image/webp;base64,${arrayBufferToBase64(imageBuffer)}`
+    const imageBuffer = await response.arrayBuffer()
+    return `data:image/webp;base64,${arrayBufferToBase64(imageBuffer)}`
+  } catch {
+    return null
+  }
 }
 
 export async function onRequest({ request }) {
