@@ -29,7 +29,7 @@ export function onRequest({ request }) {
     landingUrl.searchParams.set('code', code)
   }
 
-  const pageUrl = landingUrl.href
+  const pageUrl = `${siteUrl}/facebook${queryString}`
   const imageUrl = `${siteUrl}/facebook/og.png${queryString}`
 
   return new Response(`<!doctype html>
@@ -56,8 +56,13 @@ export function onRequest({ request }) {
     <h1>${escapeHtml(meta.title)}</h1>
     <p>${escapeHtml(meta.description)}</p>
     <img src="${escapeHtml(imageUrl)}" alt="${escapeHtml(meta.title)}" width="1200" height="630">
-    <p><a href="${escapeHtml(pageUrl)}">Open landing page</a></p>
+    <p><a href="${escapeHtml(landingUrl.href)}">Open landing page</a></p>
   </main>
+  <script>
+    if (!/facebookexternalhit|Facebot/i.test(navigator.userAgent)) {
+      location.replace(${JSON.stringify(landingUrl.href)})
+    }
+  </script>
 </body>
 </html>`, {
     headers: {
