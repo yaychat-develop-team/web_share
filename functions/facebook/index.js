@@ -1,7 +1,3 @@
-const siteUrl = 'https://facebook-share-e55.pages.dev'
-
-import shareItems from '../../share-items.json'
-
 function escapeHtml(value) {
   return String(value)
     .replaceAll('&', '&amp;')
@@ -11,23 +7,31 @@ function escapeHtml(value) {
     .replaceAll('>', '&gt;')
 }
 
-function getShareMeta(id) {
-  const item = shareItems[id]
-  const pageUrl = `${siteUrl}/facebook/${encodeURIComponent(id)}`
-  const imageVersion = encodeURIComponent(item?.updatedAt || 'default')
+function getShareMeta(searchParams) {
+  const entries = Object.fromEntries(searchParams)
+  const pairs = Object.entries(entries)
 
-  return {
-    title: item?.title || 'Facebook Share',
-    description: item?.description || 'Share page prepared for Facebook Open Graph preview.',
-    image: item?.image || `${pageUrl}/og.png?v=${imageVersion}`,
+  if (pairs.length === 0) {
+    return {
+      title: 'Facebook Share',
+      description: 'Share page prepared for Facebook Open Graph preview.',
+    }
   }
+
+  const title = pairs.map(([k, v]) => `${k}: ${v}`).join('  |  ')
+  const description = pairs.map(([k, v]) => `${k}=${v}`).join('&')
+
+  return { title, description }
 }
 
-export function onRequest({ params }) {
-  const id = params.id
-  const meta = getShareMeta(id)
-  const pageUrl = `${siteUrl}/facebook/${encodeURIComponent(id)}`
-  const appUrl = `/facebook?id=${encodeURIComponent(id)}`
+export function onRequest({ request }) {
+  const url = new URL(request.url)
+  const queryString = url.search
+  const meta = getShareMeta(url.searchParams)
+  const siteUrl = url.origin
+
+  const pageUrl = `${siteUrl}/facebook${queryString}`
+  const imageUrl = `${siteUrl}/facebook/og.png${queryString}`
 
   return new Response(`<!doctype html>
 <html lang="zh-CN">
@@ -39,8 +43,8 @@ export function onRequest({ params }) {
   <meta property="og:type" content="website">
   <meta property="og:title" content="${escapeHtml(meta.title)}">
   <meta property="og:description" content="${escapeHtml(meta.description)}">
-  <meta property="og:image" content="${escapeHtml(meta.image)}">
-  <meta property="og:image:secure_url" content="${escapeHtml(meta.image)}">
+  <meta property="og:image" content="${escapeHtml(imageUrl)}">
+  <meta property="og:image:secure_url" content="${escapeHtml(imageUrl)}">
   <meta property="og:image:type" content="image/webp">
   <meta property="og:image:width" content="3600">
   <meta property="og:image:height" content="1890">
@@ -49,8 +53,8 @@ export function onRequest({ params }) {
   <title>${escapeHtml(meta.title)}</title>
 </head>
 <body>
-  <script>location.replace(${JSON.stringify(appUrl)})</script>
-  <noscript><a href="${escapeHtml(appUrl)}">打开分享页面</a></noscript>
+  <script>location.replace('/facebook${queryString}')</script>
+  <noscript><a href="${escapeHtml('/facebook' + queryString)}">打开分享页面</a></noscript>
 </body>
 </html>`, {
     headers: {

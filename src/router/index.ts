@@ -16,7 +16,7 @@ const routes: RouteRecordRaw[] = [
     meta: { title: 'Facebook Share' },
   },
   {
-    path: '/facebook/:id?',
+    path: '/facebook',
     name: 'FacebookShare',
     component: () => import('@/views/FacebookShare.vue'),
     meta: { title: 'Facebook Share' },

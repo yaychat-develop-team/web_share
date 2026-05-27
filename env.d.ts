@@ -10,7 +10,6 @@ interface ImportMetaEnv {
   readonly VITE_FACEBOOK_SHARE_URL?: string
   readonly VITE_FACEBOOK_SHARE_TITLE?: string
   readonly VITE_FACEBOOK_SHARE_DESCRIPTION?: string
-  readonly VITE_FACEBOOK_SHARE_IMAGE?: string
   readonly VITE_FACEBOOK_APP_ID?: string
 }
 
