@@ -8,10 +8,32 @@ async function loadPoppinsBlack(request) {
   return response.arrayBuffer()
 }
 
+function arrayBufferToBase64(buffer) {
+  let binary = ''
+  const bytes = new Uint8Array(buffer)
+  const chunkSize = 0x8000
+
+  for (let i = 0; i < bytes.length; i += chunkSize) {
+    const chunk = bytes.subarray(i, i + chunkSize)
+    binary += String.fromCharCode(...chunk)
+  }
+
+  return btoa(binary)
+}
+
+async function loadBackgroundImage(request) {
+  const imageUrl = new URL('/share/facebook-share.webp', request.url)
+  const response = await fetch(imageUrl)
+  if (!response.ok) return null
+
+  const imageBuffer = await response.arrayBuffer()
+  return `data:image/webp;base64,${arrayBufferToBase64(imageBuffer)}`
+}
+
 export async function onRequest({ request }) {
   const url = new URL(request.url)
   const coin = url.searchParams.get('coin') || ''
-  const backgroundImage = new URL('/share/facebook-share.webp', request.url).href
+  const backgroundImage = await loadBackgroundImage(request)
   const fontData = await loadPoppinsBlack(request)
 
   // ImageResponse 使用异步 ReadableStream。在 Cloudflare 边缘上，未命中缓存时
@@ -27,7 +49,7 @@ export async function onRequest({ request }) {
       }}
     >
       <img
-        src={backgroundImage}
+        src={backgroundImage || new URL('/share/facebook-share.webp', request.url).href}
         width="1200"
         height="630"
         style={{
