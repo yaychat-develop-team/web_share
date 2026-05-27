@@ -45,16 +45,19 @@ export function onRequest({ request }) {
   <meta property="og:description" content="${escapeHtml(meta.description)}">
   <meta property="og:image" content="${escapeHtml(imageUrl)}">
   <meta property="og:image:secure_url" content="${escapeHtml(imageUrl)}">
-  <meta property="og:image:type" content="image/webp">
-  <meta property="og:image:width" content="3600">
-  <meta property="og:image:height" content="1890">
+  <meta property="og:image:type" content="image/png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
   <meta property="og:image:alt" content="${escapeHtml(meta.title)}">
   <meta property="og:locale" content="zh_CN">
   <title>${escapeHtml(meta.title)}</title>
 </head>
 <body>
-  <script>location.replace('/facebook${queryString}')</script>
-  <noscript><a href="${escapeHtml('/facebook' + queryString)}">打开分享页面</a></noscript>
+  <main>
+    <h1>${escapeHtml(meta.title)}</h1>
+    <p>${escapeHtml(meta.description)}</p>
+    <img src="${escapeHtml(imageUrl)}" alt="${escapeHtml(meta.title)}" width="1200" height="630">
+  </main>
 </body>
 </html>`, {
     headers: {
