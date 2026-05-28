@@ -13,7 +13,7 @@ function toAbsoluteUrl(pathOrUrl: string) {
  * 运行后再修改 meta 标签，通常无法保证被 Facebook 爬虫读取。
  */
 const searchParams = new URLSearchParams(window.location.search)
-const defaultShareImage = toAbsoluteUrl('share/facebook-share-og.png')
+const defaultShareImage = toAbsoluteUrl('share/facebook-share.webp')
 const hasQueryParams = searchParams.size > 0
 
 export const facebookShareConfig = {
@@ -52,15 +52,15 @@ export const facebookShareConfig = {
   /**
    * 分享图片 MIME 类型。
    */
-  imageType: 'image/png',
+  imageType: hasQueryParams ? 'image/png' : 'image/webp',
 
   /**
    * 分享图片尺寸。
    *
    * `og:image:width` 和 `og:image:height` 可以帮助 Facebook 更快确定预览图比例。
    */
-  imageWidth: '1200',
-  imageHeight: '630',
+  imageWidth: hasQueryParams ? '1200' : '3600',
+  imageHeight: hasQueryParams ? '630' : '1890',
 
   /**
    * 分享图片的替代文本。
