@@ -9,10 +9,7 @@ function escapeHtml(value) {
 
 function getShareMeta(searchParams) {
   const title = searchParams.get('text') || 'Facebook Share'
-  const coin = searchParams.get('coin') || ''
-  const description = coin
-    ? `Coin amount: ${coin}`
-    : 'Share page prepared for Facebook Open Graph preview.'
+  const description = 'Join us, no face cam needed — stream from home and make money.'
 
   return { title, description }
 }
@@ -35,7 +32,7 @@ export function onRequest({ request }) {
   url.searchParams.forEach((value, key) => {
     imageUrl.searchParams.append(key, value)
   })
-  imageUrl.searchParams.set('v', '20260528-svg-digits-v1')
+  imageUrl.searchParams.set('v', '20260528-svg-digits-point-v1')
 
   return new Response(`<!doctype html>
 <html lang="zh-CN">

@@ -2,16 +2,32 @@ import React from 'react'
 import { ImageResponse } from '@cloudflare/pages-plugin-vercel-og/api'
 
 const digitWidths = {
-  '0': 76,
-  '1': 48,
-  '2': 64,
-  '3': 64,
-  '4': 72,
-  '5': 72,
-  '6': 72,
-  '7': 68,
-  '8': 68,
-  '9': 68,
+  '0': 59,
+  '1': 34,
+  '2': 52,
+  '3': 53,
+  '4': 60,
+  '5': 53,
+  '6': 53,
+  '7': 49,
+  '8': 56,
+  '9': 54,
+}
+
+const pointWidth = 39
+
+function getCoinTokens(coin) {
+  const tokens = []
+  const firstGroupLength = coin.length % 3 || 3
+
+  coin.split('').forEach((digit, index) => {
+    if (index > 0 && (index - firstGroupLength) % 3 === 0) {
+      tokens.push('point')
+    }
+    tokens.push(digit)
+  })
+
+  return tokens
 }
 
 export async function onRequest({ request }) {
@@ -19,7 +35,7 @@ export async function onRequest({ request }) {
   const coin = (url.searchParams.get('coin') || '').replace(/\D/g, '')
   const backgroundImage = new URL('/share/facebook-share-og.png', request.url).href
   const unitImage = new URL('/share/unit.svg', request.url).href
-  const digits = coin.split('').filter((digit) => digit in digitWidths)
+  const coinTokens = getCoinTokens(coin).filter((token) => token === 'point' || token in digitWidths)
 
   // ImageResponse 使用异步 ReadableStream。在 Cloudflare 边缘上，未命中缓存时
   // 有可能在流尚未 enqueue 之前就把响应交给 CDN，导致 Facebook 等爬虫收到 0 字节
@@ -45,23 +61,23 @@ export async function onRequest({ request }) {
           height: 630,
         }}
       />
-      {digits.length > 0 ? (
+      {coinTokens.length > 0 ? (
         <div
           style={{
             position: 'absolute',
-            top: 150,
+            top: 170,
             left: 97,
             display: 'flex',
             alignItems: 'flex-start',
-            gap: 6,
+            gap: 2,
           }}
         >
           <img src={unitImage} width="60" height="78" />
-          {digits.map((digit, index) => (
+          {coinTokens.map((token, index) => (
             <img
-              key={`${digit}-${index}`}
-              src={new URL(`/share/${digit}.svg`, request.url).href}
-              width={digitWidths[digit]}
+              key={`${token}-${index}`}
+              src={new URL(`/share/${token === 'point' ? 'point' : token}.svg`, request.url).href}
+              width={token === 'point' ? pointWidth : digitWidths[token]}
               height="78"
             />
           ))}

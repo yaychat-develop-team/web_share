@@ -37,7 +37,7 @@ export const facebookShareConfig = {
    *
    * 对应 Open Graph 的 `og:description`，用于补充说明页面内容。
    */
-  description: import.meta.env.VITE_FACEBOOK_SHARE_DESCRIPTION || 'Share page prepared for Facebook Open Graph preview.',
+  description: 'Join us, no face cam needed — stream from home and make money.',
 
   /**
    * 分享图片。
