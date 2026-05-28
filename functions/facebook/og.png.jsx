@@ -1,18 +1,10 @@
 import React from 'react'
 import { ImageResponse } from '@cloudflare/pages-plugin-vercel-og/api'
 
-async function loadPoppinsBlack(request) {
-  const fontUrl = new URL('/fonts/poppins-latin-900-normal.woff', request.url)
-  const response = await fetch(fontUrl)
-  if (!response.ok) return null
-  return response.arrayBuffer()
-}
-
 export async function onRequest({ request }) {
   const url = new URL(request.url)
   const coin = url.searchParams.get('coin') || ''
   const backgroundImage = new URL('/share/facebook-share-og.png', request.url).href
-  const fontData = await loadPoppinsBlack(request)
 
   // ImageResponse 使用异步 ReadableStream。在 Cloudflare 边缘上，未命中缓存时
   // 有可能在流尚未 enqueue 之前就把响应交给 CDN，导致 Facebook 等爬虫收到 0 字节
@@ -46,13 +38,11 @@ export async function onRequest({ request }) {
             left: 97,
             display: 'flex',
             alignItems: 'center',
-            fontFamily: 'Poppins',
+            fontFamily: 'sans-serif',
             fontWeight: 900,
             fontSize: 98,
             lineHeight: 1,
             color: '#FDE42B',
-            letterSpacing: '-0.02em',
-            textShadow: '0 3px 0 #000000, 3px 0 0 #000000, 0 -3px 0 #000000, -3px 0 0 #000000',
           }}
         >
           {coin}
@@ -62,9 +52,6 @@ export async function onRequest({ request }) {
     {
       width: 1200,
       height: 630,
-      fonts: fontData
-        ? [{ name: 'Poppins', data: fontData, weight: 900, style: 'normal' }]
-        : undefined,
       headers: {
         'cache-control': 'public, max-age=60',
       },

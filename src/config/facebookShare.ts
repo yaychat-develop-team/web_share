@@ -13,7 +13,7 @@ function toAbsoluteUrl(pathOrUrl: string) {
  * 运行后再修改 meta 标签，通常无法保证被 Facebook 爬虫读取。
  */
 const searchParams = new URLSearchParams(window.location.search)
-const defaultShareImage = toAbsoluteUrl('share/facebook-share.webp')
+const defaultShareImage = toAbsoluteUrl('share/facebook-share-og.png')
 const hasQueryParams = searchParams.size > 0
 
 export const facebookShareConfig = {

@@ -35,7 +35,7 @@ export function onRequest({ request }) {
   url.searchParams.forEach((value, key) => {
     imageUrl.searchParams.append(key, value)
   })
-  imageUrl.searchParams.set('v', '20260527-coin-bg-v2')
+  imageUrl.searchParams.set('v', '20260528-no-shadow-v1')
 
   return new Response(`<!doctype html>
 <html lang="zh-CN">
