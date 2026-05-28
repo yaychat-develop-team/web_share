@@ -8,40 +8,10 @@ async function loadPoppinsBlack(request) {
   return response.arrayBuffer()
 }
 
-/**
- * Workers 上对超大数组做 String.fromCharCode(...chunk) 会参数过多导致运行时异常（1101）。
- * 改用 apply + 小段切片。
- */
-function arrayBufferToBase64(buffer) {
-  const bytes = new Uint8Array(buffer)
-  let binary = ''
-  const chunkSize = 4096
-
-  for (let i = 0; i < bytes.length; i += chunkSize) {
-    const chunk = bytes.subarray(i, i + chunkSize)
-    binary += String.fromCharCode.apply(null, chunk)
-  }
-
-  return btoa(binary)
-}
-
-async function loadBackgroundImage(request) {
-  try {
-    const imageUrl = new URL('/share/facebook-share.webp', request.url)
-    const response = await fetch(imageUrl)
-    if (!response.ok) return null
-
-    const imageBuffer = await response.arrayBuffer()
-    return `data:image/webp;base64,${arrayBufferToBase64(imageBuffer)}`
-  } catch {
-    return null
-  }
-}
-
 export async function onRequest({ request }) {
   const url = new URL(request.url)
   const coin = url.searchParams.get('coin') || ''
-  const backgroundImage = await loadBackgroundImage(request)
+  const backgroundImage = new URL('/share/facebook-share-og.png', request.url).href
   const fontData = await loadPoppinsBlack(request)
 
   // ImageResponse 使用异步 ReadableStream。在 Cloudflare 边缘上，未命中缓存时
@@ -57,7 +27,7 @@ export async function onRequest({ request }) {
       }}
     >
       <img
-        src={backgroundImage || new URL('/share/facebook-share.webp', request.url).href}
+        src={backgroundImage}
         width="1200"
         height="630"
         style={{
@@ -82,8 +52,7 @@ export async function onRequest({ request }) {
             lineHeight: 1,
             color: '#FDE42B',
             letterSpacing: '-0.02em',
-            // Satori 不支持 SVG <text>；用 div + 字体描边近似原渐变描边样式
-            WebkitTextStroke: '6px #000000',
+            textShadow: '0 3px 0 #000000, 3px 0 0 #000000, 0 -3px 0 #000000, -3px 0 0 #000000',
           }}
         >
           {coin}
