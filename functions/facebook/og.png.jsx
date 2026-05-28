@@ -1,10 +1,25 @@
 import React from 'react'
 import { ImageResponse } from '@cloudflare/pages-plugin-vercel-og/api'
 
+const digitWidths = {
+  '0': 76,
+  '1': 48,
+  '2': 64,
+  '3': 64,
+  '4': 72,
+  '5': 72,
+  '6': 72,
+  '7': 68,
+  '8': 68,
+  '9': 68,
+}
+
 export async function onRequest({ request }) {
   const url = new URL(request.url)
-  const coin = url.searchParams.get('coin') || ''
+  const coin = (url.searchParams.get('coin') || '').replace(/\D/g, '')
   const backgroundImage = new URL('/share/facebook-share-og.png', request.url).href
+  const unitImage = new URL('/share/unit.svg', request.url).href
+  const digits = coin.split('').filter((digit) => digit in digitWidths)
 
   // ImageResponse 使用异步 ReadableStream。在 Cloudflare 边缘上，未命中缓存时
   // 有可能在流尚未 enqueue 之前就把响应交给 CDN，导致 Facebook 等爬虫收到 0 字节
@@ -30,22 +45,26 @@ export async function onRequest({ request }) {
           height: 630,
         }}
       />
-      {coin ? (
+      {digits.length > 0 ? (
         <div
           style={{
             position: 'absolute',
-            top: 138,
+            top: 150,
             left: 97,
             display: 'flex',
-            alignItems: 'center',
-            fontFamily: 'sans-serif',
-            fontWeight: 900,
-            fontSize: 98,
-            lineHeight: 1,
-            color: '#FDE42B',
+            alignItems: 'flex-start',
+            gap: 6,
           }}
         >
-          {coin}
+          <img src={unitImage} width="60" height="78" />
+          {digits.map((digit, index) => (
+            <img
+              key={`${digit}-${index}`}
+              src={new URL(`/share/${digit}.svg`, request.url).href}
+              width={digitWidths[digit]}
+              height="78"
+            />
+          ))}
         </div>
       ) : null}
     </div>,
