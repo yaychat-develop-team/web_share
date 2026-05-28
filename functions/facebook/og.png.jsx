@@ -33,7 +33,7 @@ function getCoinTokens(coin) {
 export async function onRequest({ request }) {
   const url = new URL(request.url)
   const coin = (url.searchParams.get('coin') || '').replace(/\D/g, '')
-  const backgroundImage = new URL('/share/facebook-share.webp', request.url).href
+  const backgroundImage = new URL('/share/facebook-share-og.png', request.url).href
   const unitImage = new URL('/share/unit.svg', request.url).href
   const coinTokens = getCoinTokens(coin).filter((token) => token === 'point' || token in digitWidths)
 
