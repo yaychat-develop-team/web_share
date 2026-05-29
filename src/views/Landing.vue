@@ -3,7 +3,6 @@
     <ResponsiveImg
       class="absolute left-0 top-0 z-1 w-screen object-cover aspect-375/473"
       name="landing/hero"
-      ext="png"
       alt=""
       :lazy="false"
       fetchpriority="high"
@@ -13,7 +12,6 @@
         class="w-[32px] h-[32px]! mr-[8px]"
         :name="brandName === 'Oumi' ? 'landing/logo-oumi' : 'landing/logo-yaychat'"
         :scales="[3]"
-        ext="png"
         alt=""
         :lazy="false"
         fetchpriority="high"
@@ -30,7 +28,6 @@
           class="w-[200px] aspect-608/73"
           name="landing/turn-your-voice"
           :scales="[3]"
-          ext="png"
         />
       </div>
       <div class="pl-[20px] mb-[20px]">
@@ -38,7 +35,6 @@
           class="w-[280px] aspect-845/125"
           name="landing/into-income"
           :scales="[3]"
-          ext="png"
         />
       </div>
       <div class="pl-[20px] mb-[24px]">
@@ -80,7 +76,6 @@
           <ResponsiveImg
             class="h-[54px] w-[54px] rounded-[8px] object-cover"
             :name="item.image"  
-            ext="png"
             alt=""
             :base-width="54"
           />
@@ -104,7 +99,6 @@
           <ResponsiveImg
             class="h-[104px]! w-[142px] mb-[10px] rounded-[8px] object-cover"
             :name="item.image"
-            ext="png"
             alt=""
             :base-width="142"
           />
@@ -149,7 +143,6 @@
             <ResponsiveImg
               class="h-[60px] w-[60px] rounded-full object-cover"
               :name="item.avatar"
-              ext="png"
               alt=""
               :base-width="60"
             />
@@ -178,26 +171,61 @@
         <p class="text-[12px] font-medium leading-[16px] text-[rgba(255,255,255,0.8)]">Join Us and Become the Next Voice Chat Star</p>
       </section>
 
-      <div class="fixed bottom-0 left-0 h-[112px] w-screen p-[16px_16px_0_16px] bg-[#461791]">
-        <div class="flex items-center justify-center gap-[12px] mb-[16px]">
+      <div v-if="brandName === 'Oumi'" class="fixed bottom-0 left-0 h-[120px] w-screen p-[12px_16px_0_16px] bg-[#461791]">
+        <div class="flex w-full items-center gap-[11px] mb-[16px]">
           <div
-            class="flex h-[42px] flex-1 items-center justify-center gap-[4px] rounded-[8px] bg-[#03d00a] text-[13px] font-semibold leading-[20px] text-white no-underline"
+            class="flex h-[54px] min-w-0 flex-1 basis-0 items-center justify-center rounded-[12px] bg-black text-[13px] font-semibold leading-[20px] text-white no-underline border border-white"
             aria-label="Android Download"
+            @click="download('google')"
           >
-            <ResponsiveImg name="landing/android-logo" ext="png" class="h-[20px] w-[20px]" />
-            <span>Android Download</span>
+            <ResponsiveImg name="landing/google-logo" class="h-[27px]! w-[24px] mr-[8px]" />
+            <div>
+              <p class="text-[10px] font-medium leading-[15px]">GET IT ON</p>
+              <p class="mt-[-3px] text-[15px] font-bold leading-[23px]">Google Play</p>
+            </div>
           </div>
           <div
-            class="flex h-[42px] flex-1 items-center justify-center gap-[4px] rounded-[8px] bg-white text-[13px] font-semibold leading-[20px] text-[#390283] no-underline"
+            class="flex h-[54px] min-w-0 flex-1 basis-0 items-center justify-center rounded-[12px] bg-black text-[13px] font-semibold leading-[20px] text-white no-underline border border-white"
             aria-label="IOS Download"
+            @click="download('ios')"
           >
-            <ResponsiveImg name="landing/apple-logo" ext="png" class="h-[20px] w-[20px]" />
-            <span>IOS Download</span>
+            <ResponsiveImg name="landing/apple-logo" class="h-[28px] w-[28px] mr-[8px]" />
+            <div>
+              <p class="text-[10px] font-medium leading-[15px]">GET IT ON</p>
+              <p class="mt-[-3px] text-[15px] font-bold leading-[23px]">App Store</p>
+            </div>
           </div>
         </div>
         <div class="text-[13px] text-center font-medium leading-[16px] text-[rgba(255,255,255,0.8)]" >
-          <div class="inline-block underline">
+          <div class="inline-block underline" @click="download('official')">
             Official website download
+          </div>
+        </div>
+      </div>
+
+      <div v-if="brandName === 'Yaychat'" class="fixed bottom-0 left-0 h-[90px] w-screen p-[16px_16px_0_16px] bg-[#461791]">
+        <div class="flex w-full items-center gap-x-[11px] mb-[16px]">
+          <div
+            class="flex h-[54px] min-w-0 flex-1 basis-0 items-center justify-center gap-[4px] rounded-[12px] bg-black text-[13px] font-semibold leading-[20px] text-white no-underline border border-white"
+            aria-label="google Download"
+            @click="download('google')"
+          >
+            <ResponsiveImg name="landing/google-logo" class="h-[27px]! w-[20px] mr-[10px]" />
+            <div>
+              <p class="text-[10px] font-medium leading-[15px]">GET IT ON</p>
+              <p class="mt-[-3px] text-[15px] font-bold leading-[23px]">Google Play</p>
+            </div>
+          </div>
+          <div
+            class="flex h-[54px] min-w-0 flex-1 basis-0 items-center justify-center rounded-[12px] bg-black text-[13px] font-semibold leading-[20px] text-white no-underline border border-white"
+            aria-label="IOS Download"
+            @click="download('official')"
+          >
+            <ResponsiveImg name="landing/android-logo" class="h-[29px]! w-[30px] mr-[9px]" />
+            <div>
+              <p class="text-[10px] font-medium leading-[15px]">download from</p>
+              <p class="mt-[-3px] text-[15px] font-bold leading-[23px]">Official Site</p>
+            </div>
           </div>
         </div>
       </div>
@@ -208,9 +236,9 @@
 <script setup lang="ts">
 import ResponsiveImg from '@/components/ResponsiveImg.vue'
 import SvgIcon from '@/components/SvgIcon.vue'
-import androidIconSvg from '@/assets/svg/landing/android-icon.svg'
 import checkSvg from '@/assets/svg/landing/check.svg'
-import iosIconSvg from '@/assets/svg/landing/ios-icon.svg'
+import { ta } from '@/utils/thinkingdata'
+import { onMounted } from 'vue'
 
 const featurePills = [
   'Flexible schedule',
@@ -284,11 +312,72 @@ const proofs = [
     role: 'Freelancer',
     amount: '26,577',
   },
+  {
+    avatar: 'landing/avatar-kelsey',
+    name: '🧿𝓚𝐞𝐥𝐬𝐞𝔂🌹ᥫ᭡',
+    role: 'Homemaker',
+    amount: '62,307',
+  },
 ]
 
 const brandName = typeof window !== 'undefined' && window.location.hostname.includes('oumi')
   ? 'Oumi'
   : 'Yaychat'
 
+const downloadUrl = (type: 'google' | 'ios' | 'official') => {
+  if (brandName === 'Oumi') {
+    switch (type) {
+      case 'google':
+        return 'https://play.google.com/store/apps/details?id=chat.oumi.app'
+      case 'ios':
+        return 'https://apps.apple.com/app/id6748783645'
+      case 'official':
+        return 'http://cdn.oumiapp.com/oumi/reviews/oumi-gw.apk'
+      default:
+        break;
+    }
+  } else {
+    switch (type) {
+      case 'google':
+        return 'https://play.google.com/store/apps/details?id=chat.yay.app'
+      case 'official':
+        return 'https://cdn.yay1.xyz/apks/yaychat-gw.apk'
+      default:
+        break;
+    }
+  }
+}
+
+const copyInviteCode = async () => {
+  const inviteCode = new URLSearchParams(window.location.search).get('code')
+  if (!inviteCode) return
+
+  const copyText = `#^yc:${inviteCode}^#`
+
+  try {
+    await navigator.clipboard.writeText(copyText)
+  } catch {
+    const textarea = document.createElement('textarea')
+    textarea.value = copyText
+    textarea.style.position = 'fixed'
+    textarea.style.opacity = '0'
+    document.body.appendChild(textarea)
+    textarea.select()
+    document.execCommand('copy')
+    document.body.removeChild(textarea)
+  }
+}
+
+const download = async (type: 'google' | 'ios' | 'official') => {
+  ta.track('gs_share_show', {
+    type,
+  })
+  await copyInviteCode()
+  window.open(downloadUrl(type), '_blank')
+}
+
+onMounted(() => {
+  ta.track('gs_share_show')
+})
 
 </script>

@@ -11,6 +11,8 @@ interface ImportMetaEnv {
   readonly VITE_FACEBOOK_SHARE_TITLE?: string
   readonly VITE_FACEBOOK_SHARE_DESCRIPTION?: string
   readonly VITE_FACEBOOK_APP_ID?: string
+  readonly VITE_THINKINGDATA_APPID: string
+  readonly VITE_THINKINGDATA_SERVER_URL: string
 }
 
 interface ImportMeta {
