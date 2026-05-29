@@ -1,40 +1,294 @@
 <template>
-  <main class="min-h-screen bg-white px-16 py-24 text-slate-900">
-    <section class="mx-auto flex w-full max-w-[375px] flex-col gap-16">
-      <div>
-        <p class="text-12 font-semibold uppercase tracking-wide text-slate-400">
-          Landing
-        </p>
-        <h1 class="mt-8 text-28 font-semibold leading-tight">
-          {{ code || 'No code' }}
-        </h1>
-        <p class="mt-8 text-14 leading-20 text-slate-500">
-          Code from Facebook share URL.
-        </p>
+  <main class="min-h-screen pb-[130px] overflow-x-hidden bg-[#250064] font-['Poppins',Arial,sans-serif] text-white">
+    <ResponsiveImg
+      class="absolute left-0 top-0 z-1 w-screen object-cover aspect-375/473"
+      name="landing/hero"
+      ext="png"
+      alt=""
+      :lazy="false"
+      fetchpriority="high"
+    />
+    <div class="pl-[20px] absolute left-0 top-[21px] z-2 flex items-center">
+      <ResponsiveImg
+        class="w-[32px] h-[32px]! mr-[8px]"
+        :name="brandName === 'Oumi' ? 'landing/logo-oumi' : 'landing/logo-yaychat'"
+        :scales="[3]"
+        ext="png"
+        alt=""
+        :lazy="false"
+        fetchpriority="high"
+      />
+      <h1 class="text-white text-[14px] font-black leading-[21px]">{{ brandName }}</h1>
+    </div>
+    
+    <section
+      class="relative z-3 mx-auto pt-[255px] overflow-hidden"
+      aria-label="Yaychat landing page"
+    >
+      <div class="pl-[20px] mb-[8px]">
+        <ResponsiveImg
+          class="w-[200px] aspect-608/73"
+          name="landing/turn-your-voice"
+          :scales="[3]"
+          ext="png"
+        />
+      </div>
+      <div class="pl-[20px] mb-[20px]">
+        <ResponsiveImg
+          class="w-[280px] aspect-845/125"
+          name="landing/into-income"
+          :scales="[3]"
+          ext="png"
+        />
+      </div>
+      <div class="pl-[20px] mb-[24px]">
+        <div class="w-[280px] h-[36px] bg-white rounded-[9999px] flex items-center justify-center">
+          <div class="text-13px font-[600] text-[#390283]">
+            Chat from home and earn money!
+          </div>
+        </div>
+      </div>
+      <ul
+        class="list-none mb-[36px] grid grid-cols-[139px_183px] gap-x-[13px] gap-y-[14px] pl-[20px]"
+        aria-label="Yaychat benefits"
+      >
+        <li v-for="item in featurePills" :key="item" class="flex items-center gap-[4px] text-[12px] font-semibold leading-[16px] text-white">
+          <img :src="checkSvg" alt="" class="h-[18px] w-[18px]">
+          <span>{{ item }}</span>
+        </li>
+      </ul>
+      <h2 class="mb-[7px] text-[36px] font-black leading-[54px] text-black bg-[#FFD400] indent-[21px]">Why Join Us?</h2>
+<!--       
+      <section
+        v-for="section in sections"
+        :key="section.no"
+        class=""
+      >
+        <p class="m-0 text-[48px] font-black leading-[58px] text-[#ffd400]">{{ section.no }}</p>
+        <h3 class="mt-[-10px] text-[24px] font-black leading-[36px] text-[#ffd400]">{{ section.title }}</h3>
+        <p class="mt-[2px] w-[297px] text-[14px] font-medium leading-[16px] text-white">{{ section.desc }}</p>
+      </section> -->
+      <section
+        class="pl-[20px] mb-[18px]"
+      >
+        <p class="text-[60px] font-black leading-[90px] text-white/20">01</p>
+        <h3 class="mt-[-50px]! mb-[2px]! text-[24px] font-black leading-[36px] text-[#ffd400]">Easy to earn</h3>
+        <p class="w-[297px] text-[14px] font-medium leading-[16px] text-white">Lots of quality users — just chat and get rewarded.</p>
+      </section>
+      <div class="grid gap-[10px] px-[20px] mb-[32px]">
+        <article v-for="item in earningItems" :key="item.title" class="relative h-[78px] pl-[12px] flex items-center rounded-[12px] bg-[#f4effe]">
+          <ResponsiveImg
+            class="h-[54px] w-[54px] rounded-[8px] object-cover"
+            :name="item.image"  
+            ext="png"
+            alt=""
+            :base-width="54"
+          />
+          <div class="ml-[12px]">
+            <h4 class="mb-[5px] text-[14px] font-semibold leading-[21px] text-black">{{ item.title }}</h4>
+            <p class="text-[12px] font-normal leading-[16px] text-[#343235]/70">{{ item.desc }}</p>
+          </div>
+        </article>
       </div>
 
-      <dl class="grid gap-8 text-12 leading-18 text-slate-600">
-        <div class="rounded-8 bg-slate-50 p-12">
-          <dt class="font-semibold text-slate-900">
-            code
-          </dt>
-          <dd class="mt-4 break-all">
-            {{ code || '-' }}
-          </dd>
+      <section
+        class="pl-[20px] mb-[18px]"
+      >
+        <p class="text-[60px] font-black leading-[90px] text-white/20">02</p>
+        <h3 class="mt-[-50px]! mb-[2px]! text-[24px] font-black leading-[36px] text-[#ffd400]">Simple Job Duties</h3>
+        <p class="w-[297px] text-[14px] font-medium leading-[16px] text-white">Start Your Voice Chat Host Career with Zero Barriers.</p>
+      </section>
+
+      <div class="px-[20px] mb-[32px] grid grid-cols-[repeat(2,162px)] gap-x-[11px] gap-y-[10px]">
+        <article v-for="item in duties" :key="item.title" class="relative h-[222px] w-[162px] p-[10px_10px_19px_10px] rounded-[12px] bg-[#f4effe]">
+          <ResponsiveImg
+            class="h-[104px]! w-[142px] mb-[10px] rounded-[8px] object-cover"
+            :name="item.image"
+            ext="png"
+            alt=""
+            :base-width="142"
+          />
+          <h4 class="w-[146px] mb-[5px] text-center text-[14px] font-semibold leading-[21px] text-black">{{ item.title }}</h4>
+          <p class="w-[142px] text-center text-[12px] font-normal leading-[16px] text-[#343235]/70">
+            {{ item.desc }}
+          </p>
+        </article>
+      </div>
+
+      <section
+        class="pl-[20px] mb-[18px]"
+      >
+        <p class="text-[60px] font-black leading-[90px] text-white/20">03</p>
+        <h3 class="mt-[-50px]! mb-[2px]! text-[24px] font-black leading-[36px] text-[#ffd400]">Rising Star Program</h3>
+        <p class="w-[297px] text-[14px] font-medium leading-[16px] text-white">From zero to growth, we support you all the way.</p>
+      </section>
+
+      <div class="grid gap-[10px] px-[20px] mb-[32px]">
+        <article v-for="item in supports" :key="item.title" class="h-[120px] w-[335px] overflow-hidden rounded-[12px] bg-[#f4effe]">
+          <div class="flex h-[50px] w-[335px] items-center gap-[6px] rounded-[12px_12px_0_0] border border-white bg-[#af00ff]/10 pl-[13px]">
+            <SvgIcon name="landing/star" size="16" />
+            <h4 class="text-[16px] font-bold leading-[24px] text-[#6707c1]">{{ item.title }}</h4>
+          </div>
+          <div class="p-[14px_14px_16px_14px]">
+            <p class=" text-[13px] font-normal leading-[20px] text-[#343235]/70">{{ item.desc }}</p>
+          </div>
+        </article>
+      </div>
+
+      <section
+        class="pl-[20px] mb-[18px]"
+      >
+        <p class="text-[60px] font-black leading-[90px] text-white/20">04</p>
+        <h3 class="mt-[-50px]! mb-[2px]! text-[24px] font-black leading-[36px] text-[#ffd400]">Their Weekly Earnings</h3>
+        <p class="w-[297px] text-[14px] font-medium leading-[16px] text-white">Real earning cases, with transparent payout records.</p>
+      </section>
+
+      <div class="grid grid-cols-[repeat(2,200px)] gap-[12px] px-[20px] mb-[28px]">
+        <article v-for="item in proofs" :key="item.name" class="h-[278px] w-[200px] pt-[16px] rounded-[12px] bg-[#f4effe]">
+          <div class="mb-[12px] flex items-center justify-center">
+            <ResponsiveImg
+              class="h-[60px] w-[60px] rounded-full object-cover"
+              :name="item.avatar"
+              ext="png"
+              alt=""
+              :base-width="60"
+            />
+          </div>
+          <h4 class="mb-[3px] text-center text-[16px] font-bold leading-[24px] text-[#343235]">{{ item.name }}</h4>
+          <div class="mb-[16px] flex items-center justify-center">
+            <div class="h-[22px] w-[115px] rounded-[4px] bg-[#efdcff] text-center text-[12px] font-normal leading-[22px] text-[#343235]/70">
+              {{ item.role }}
+            </div>
+          </div>
+          <div class="px-[20px] mb-[18px]">
+            <div class="border-t border-[#6707c1]/10"></div>
+          </div>
+          <p class="text-[12px] text-center font-normal leading-[18px] text-[#343235]/70">Last Week</p>
+          <p class="mt-[-3px] text-[36px] text-center font-bold leading-[54px] text-[#6707c1]">{{ item.amount }}</p>
+          <p class="text-[14px] text-center font-medium leading-[21px] text-[#6707c1]">Poso</p>
+        </article>
+      </div>
+
+      <section class="relative text-center">
+        <SvgIcon name="landing/sparkle-left" size="24" class="absolute left-[23px] top-[7px] rotate-270" />
+        <h3 class="text-[28px] font-black leading-[42px]">
+          You Can <span class="text-[#ffd400]">Start Now</span>
+        </h3>
+        <SvgIcon name="landing/sparkle-left" size="24" class="absolute right-[23px] top-[7px]" />
+        <p class="text-[12px] font-medium leading-[16px] text-[rgba(255,255,255,0.8)]">Join Us and Become the Next Voice Chat Star</p>
+      </section>
+
+      <div class="fixed bottom-0 left-0 h-[112px] w-screen p-[16px_16px_0_16px] bg-[#461791]">
+        <div class="flex items-center justify-center gap-[12px] mb-[16px]">
+          <div
+            class="flex h-[42px] flex-1 items-center justify-center gap-[4px] rounded-[8px] bg-[#03d00a] text-[13px] font-semibold leading-[20px] text-white no-underline"
+            aria-label="Android Download"
+          >
+            <ResponsiveImg name="landing/android-logo" ext="png" class="h-[20px] w-[20px]" />
+            <span>Android Download</span>
+          </div>
+          <div
+            class="flex h-[42px] flex-1 items-center justify-center gap-[4px] rounded-[8px] bg-white text-[13px] font-semibold leading-[20px] text-[#390283] no-underline"
+            aria-label="IOS Download"
+          >
+            <ResponsiveImg name="landing/apple-logo" ext="png" class="h-[20px] w-[20px]" />
+            <span>IOS Download</span>
+          </div>
         </div>
-      </dl>
+        <div class="text-[13px] text-center font-medium leading-[16px] text-[rgba(255,255,255,0.8)]" >
+          <div class="inline-block underline">
+            Official website download
+          </div>
+        </div>
+      </div>
     </section>
   </main>
 </template>
 
 <script setup lang="ts">
-import { computed } from 'vue'
-import { useRoute } from 'vue-router'
+import ResponsiveImg from '@/components/ResponsiveImg.vue'
+import SvgIcon from '@/components/SvgIcon.vue'
+import androidIconSvg from '@/assets/svg/landing/android-icon.svg'
+import checkSvg from '@/assets/svg/landing/check.svg'
+import iosIconSvg from '@/assets/svg/landing/ios-icon.svg'
 
-const route = useRoute()
+const featurePills = [
+  'Flexible schedule',
+  'No need to show your face',
+  'Newcomer support',
+  'Weekly salary payout',
+]
 
-const code = computed(() => {
-  const value = route.query.code
-  return Array.isArray(value) ? value[0] || '' : value || ''
-})
+const earningItems = [
+  {
+    image: 'landing/quality-users',
+    title: 'High-spending users',
+    desc: 'KA users spend 10,000+ on average',
+  },
+  {
+    image: 'landing/bonus-events',
+    title: 'Lots of bonus events',
+    desc: 'More rewards, more chances',
+  },
+  {
+    image: 'landing/weekly-payment',
+    title: 'Weekly payment',
+    desc: 'Scheduled payouts, fast payment.',
+  },
+]
+
+const duties = [
+  {
+    image: 'landing/face-card',
+    title: 'No need to show your face',
+    desc: 'just let your charming voice shine.',
+  },
+  {
+    image: 'landing/hours-card',
+    title: 'Flexible working hours',
+    desc: '20 working hours, flexibly scheduled.',
+  },
+  {
+    image: 'landing/traffic-card',
+    title: 'Professional traffic support',
+    desc: 'Steady access to high-value users.',
+  },
+  {
+    image: 'landing/team-card',
+    title: 'Room Manager team support',
+    desc: 'Team support to help you grow faster.',
+  },
+]
+
+const supports = [
+  {
+    title: 'Newcomer Support',
+    desc: '3-on-1 Trainer support to guide you through onboarding and help you grow faster.',
+  },
+  {
+    title: 'Traffic support for newcomers',
+    desc: 'Exclusive quality traffic for newcomers, with less competition to help you grow faster.',
+  },
+]
+
+const proofs = [
+  {
+    avatar: 'landing/avatar-madeline',
+    name: '🚀🔞Madeline🍒🍑',
+    role: 'College Students',
+    amount: '50,315',
+  },
+  {
+    avatar: 'landing/avatar-vega',
+    name: '🌼Vega🩷',
+    role: 'Freelancer',
+    amount: '26,577',
+  },
+]
+
+const brandName = typeof window !== 'undefined' && window.location.hostname.includes('oumi')
+  ? 'Oumi'
+  : 'Yaychat'
+
+
 </script>
