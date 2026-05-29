@@ -11,12 +11,13 @@
     >
       <SwiperSlide v-for="item in items" :key="item.name" class="proof-swiper-slide">
         <article class="h-[278px] w-[200px] pt-[16px] rounded-[12px] bg-[#f4effe]">
-          <div class="mb-[12px] flex items-center justify-center">
+          <div class="proof-avatar mx-auto mb-[12px]">
             <ResponsiveImg
-              class="h-[60px] w-[60px] rounded-full object-cover"
+              class="proof-avatar__img"
               :name="item.avatar"
               alt=""
               :base-width="60"
+              sizes="60px"
             />
           </div>
           <h4 class="mb-[3px] text-center text-[16px] font-bold leading-[24px] text-[#343235]">{{ item.name }}</h4>
@@ -58,12 +59,34 @@ const TRANSITION_SPEED = 400
 </script>
 
 <style scoped>
+/* Swiper 默认 overflow:hidden + wrapper 的 translate3d，会让子元素 rounded-full 在 WebKit 里被斜向裁切 */
 .proof-swiper {
+  overflow: visible;
+}
+
+.proof-swiper :deep(.swiper-wrapper) {
   overflow: visible;
 }
 
 .proof-swiper-slide {
   width: 200px;
   height: auto;
+  overflow: visible;
+}
+
+.proof-avatar {
+  width: 60px;
+  height: 60px;
+  flex-shrink: 0;
+  overflow: hidden;
+  border-radius: 9999px;
+  isolation: isolate;
+}
+
+.proof-avatar__img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
 }
 </style>
