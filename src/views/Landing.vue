@@ -137,30 +137,7 @@
         <p class="w-[297px] text-[14px] font-medium leading-[16px] text-white">Real earning cases, with transparent payout records.</p>
       </section>
 
-      <div class="grid grid-cols-[repeat(2,200px)] gap-[12px] px-[20px] mb-[28px]">
-        <article v-for="item in proofs" :key="item.name" class="h-[278px] w-[200px] pt-[16px] rounded-[12px] bg-[#f4effe]">
-          <div class="mb-[12px] flex items-center justify-center">
-            <ResponsiveImg
-              class="h-[60px] w-[60px] rounded-full object-cover"
-              :name="item.avatar"
-              alt=""
-              :base-width="60"
-            />
-          </div>
-          <h4 class="mb-[3px] text-center text-[16px] font-bold leading-[24px] text-[#343235]">{{ item.name }}</h4>
-          <div class="mb-[16px] flex items-center justify-center">
-            <div class="h-[22px] w-[115px] rounded-[4px] bg-[#efdcff] text-center text-[12px] font-normal leading-[22px] text-[#343235]/70">
-              {{ item.role }}
-            </div>
-          </div>
-          <div class="px-[20px] mb-[18px]">
-            <div class="border-t border-[#6707c1]/10"></div>
-          </div>
-          <p class="text-[12px] text-center font-normal leading-[18px] text-[#343235]/70">Last Week</p>
-          <p class="mt-[-3px] text-[36px] text-center font-bold leading-[54px] text-[#6707c1]">{{ item.amount }}</p>
-          <p class="text-[14px] text-center font-medium leading-[21px] text-[#6707c1]">Poso</p>
-        </article>
-      </div>
+      <ProofCarousel :items="proofs" />
 
       <section class="relative text-center">
         <SvgIcon name="landing/sparkle-left" size="24" class="absolute left-[23px] top-[7px] rotate-270" />
@@ -203,7 +180,7 @@
         </div>
       </div>
 
-      <div v-if="brandName === 'Yaychat'" class="fixed bottom-0 left-0 h-[90px] w-screen p-[16px_16px_0_16px] bg-[#461791]">
+      <div v-if="brandName === 'Yaychat'" class="fixed bottom-0 left-0 z-[9999] h-[90px] w-screen p-[16px_16px_0_16px] bg-[#461791]">
         <div class="flex w-full items-center gap-x-[11px] mb-[16px]">
           <div
             class="flex h-[54px] min-w-0 flex-1 basis-0 items-center justify-center gap-[4px] rounded-[12px] bg-black text-[13px] font-semibold leading-[20px] text-white no-underline border border-white"
@@ -235,6 +212,7 @@
 
 <script setup lang="ts">
 import ResponsiveImg from '@/components/ResponsiveImg.vue'
+import ProofCarousel from '@/components/ProofCarousel.vue'
 import SvgIcon from '@/components/SvgIcon.vue'
 import checkSvg from '@/assets/svg/landing/check.svg'
 import { ta } from '@/utils/thinkingdata'
