@@ -7,8 +7,10 @@ function escapeHtml(value) {
     .replaceAll('>', '&gt;')
 }
 
-function getShareMeta(searchParams) {
-  const title = searchParams.get('text') || 'Facebook Share'
+function getShareMeta(hostname) {
+  const title = hostname.includes('oumi')
+    ? 'Oumi - Your voice, their story'
+    : 'Yaychat-Voice chat room'
   const description = 'Join us, no face cam needed — stream from home and make money.'
 
   return { title, description }
@@ -17,7 +19,7 @@ function getShareMeta(searchParams) {
 export function onRequest({ request }) {
   const url = new URL(request.url)
   const queryString = url.search
-  const meta = getShareMeta(url.searchParams)
+  const meta = getShareMeta(url.hostname)
   const siteUrl = url.origin
   const code = url.searchParams.get('inviteCode') || ''
   const landingUrl = new URL('/landing', siteUrl)
