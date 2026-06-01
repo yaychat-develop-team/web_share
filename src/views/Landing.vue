@@ -148,7 +148,7 @@
         <p class="text-[12px] font-medium leading-[16px] text-[rgba(255,255,255,0.8)]">Join Us and Become the Next Voice Chat Star</p>
       </section>
 
-      <div v-if="brandName === 'Oumi'" class="fixed bottom-0 left-0 h-[120px] w-screen p-[12px_16px_0_16px] bg-[#461791]">
+      <div v-if="brandName === 'Oumi'" class="fixed bottom-0 left-0 z-[9999] h-[120px] w-screen p-[12px_16px_0_16px] bg-[#461791]">
         <div class="flex w-full items-center gap-[11px] mb-[16px]">
           <div
             class="flex h-[54px] min-w-0 flex-1 basis-0 items-center justify-center rounded-[12px] bg-black text-[13px] font-semibold leading-[20px] text-white no-underline border border-white"
