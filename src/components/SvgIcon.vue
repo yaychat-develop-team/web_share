@@ -10,7 +10,13 @@
 <script setup lang="ts">
 import { computed, type CSSProperties } from 'vue'
 
-/** 尺寸可传数字（按 px）或字符串（如 "20px" / "1.5em" / "100%"） */
+/**
+ * 尺寸可传：
+ * - number：设计稿 px，自动换算 vw（如 24 → 6.4vw）
+ * - 纯数字字符串：与 number 等价（如 size="24"）
+ * - 含 px 的字符串：替换其中 px 为 vw（如 "24px" / "calc(100% - 8px)"）
+ * - 其它单位字符串：原样保留（如 "1.5em" / "100%" / "6.4vw"）
+ */
 type SvgSize = number | string
 
 interface Props {
@@ -68,20 +74,27 @@ function pxToVw(px: number): string {
 /** 匹配字符串里的 px 值（含小数 / 负数），用于把 "24px" / "calc(100% - 8px)" 中的 px 转 vw */
 const PX_VALUE_REGEXP = /(-?\d*\.?\d+)px/g
 
+/** 无单位的纯数字字符串，与 number 一样按设计稿 px 处理（兼容 size="24"） */
+const PLAIN_NUMBER_REGEXP = /^-?\d*\.?\d+$/
+
 function convertPxStringToVw(input: string): string {
-  return input.replace(PX_VALUE_REGEXP, (match, raw: string) => pxToVw(Number.parseFloat(raw)))
+  return input.replace(PX_VALUE_REGEXP, (_match, raw: string) => pxToVw(Number.parseFloat(raw)))
 }
 
 /**
- * 把外部传入的尺寸归一化为 CSS 长度字符串。
- * - number → 按设计稿 px 处理，自动换算成 vw（与全局 postcss 插件等价）
- * - string → 仅替换其中的 px 片段为 vw，其它单位（em / % / vw / rem 等）保持原样
- * - 空值 → undefined
+ * 把外部传入的尺寸归一化为 CSS 长度字符串（与全局 postcss px→vw 规则一致）。
  */
 function normalizeSize(value: SvgSize | undefined): string | undefined {
   if (value === undefined || value === null || value === '') return undefined
+
   if (typeof value === 'number') return pxToVw(value)
-  return convertPxStringToVw(value)
+
+  const trimmed = value.trim()
+  if (!trimmed) return undefined
+
+  if (PLAIN_NUMBER_REGEXP.test(trimmed)) return pxToVw(Number.parseFloat(trimmed))
+
+  return convertPxStringToVw(trimmed)
 }
 
 const finalWidth = computed(() => normalizeSize(props.width ?? props.size))
