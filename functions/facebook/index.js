@@ -56,12 +56,75 @@ export function onRequest({ request }) {
   <title>${escapeHtml(meta.title)}</title>
 </head>
 <body>
-  <main>
-    <h1>${escapeHtml(meta.title)}</h1>
-    <p>${escapeHtml(meta.description)}</p>
-    <img src="${escapeHtml(imageUrl.href)}" alt="${escapeHtml(meta.title)}" width="1200" height="630">
-    <p><a href="${escapeHtml(landingUrl.href)}">Open landing page</a></p>
+  <main class="loading-page" aria-busy="true">
+    <section class="loading-card" aria-live="polite">
+      <div class="spinner" aria-hidden="true"></div>
+      <p>Loading...</p>
+    </section>
+    <section class="share-meta" aria-label="Share preview">
+      <h1>${escapeHtml(meta.title)}</h1>
+      <p>${escapeHtml(meta.description)}</p>
+      <img src="${escapeHtml(imageUrl.href)}" alt="${escapeHtml(meta.title)}" width="1200" height="630">
+      <p><a href="${escapeHtml(landingUrl.href)}">Open landing page</a></p>
+    </section>
   </main>
+  <style>
+    html,
+    body {
+      width: 100%;
+      min-height: 100%;
+      margin: 0;
+      background: #360387;
+      color: #fff;
+      font-family: Arial, sans-serif;
+    }
+
+    .loading-page {
+      display: grid;
+      min-height: 100vh;
+      place-items: center;
+    }
+
+    .loading-card {
+      display: grid;
+      justify-items: center;
+      gap: 16px;
+    }
+
+    .loading-card p {
+      margin: 0;
+      color: rgba(255, 255, 255, 0.82);
+      font-size: 14px;
+      line-height: 20px;
+    }
+
+    .spinner {
+      width: 36px;
+      height: 36px;
+      border: 3px solid rgba(255, 255, 255, 0.28);
+      border-top-color: #ffd400;
+      border-radius: 50%;
+      animation: spin 0.8s linear infinite;
+    }
+
+    .share-meta {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      margin: -1px;
+      padding: 0;
+      overflow: hidden;
+      clip: rect(0 0 0 0);
+      white-space: nowrap;
+      border: 0;
+    }
+
+    @keyframes spin {
+      to {
+        transform: rotate(360deg);
+      }
+    }
+  </style>
   <script>
     if (!/facebookexternalhit|Facebot/i.test(navigator.userAgent)) {
       location.replace(${JSON.stringify(landingUrl.href)})
