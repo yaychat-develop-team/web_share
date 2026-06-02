@@ -16,11 +16,20 @@ function getShareMeta(hostname) {
   return { title, description }
 }
 
+function getCanonicalShareOrigin(url) {
+  const hostname = url.hostname
+    .replace(/^test\.share\./i, '')
+    .replace(/^share\./i, '')
+
+  return `${url.protocol}//${hostname}${url.port ? `:${url.port}` : ''}`
+}
+
 export function onRequest({ request }) {
   const url = new URL(request.url)
   const queryString = url.search
   const meta = getShareMeta(url.hostname)
   const siteUrl = url.origin
+  const canonicalSiteUrl = getCanonicalShareOrigin(url)
   const code = url.searchParams.get('inviteCode') || ''
   const landingUrl = new URL('/landing', siteUrl)
 
@@ -28,7 +37,7 @@ export function onRequest({ request }) {
     landingUrl.searchParams.set('code', code)
   }
 
-  const pageUrl = `${siteUrl}/facebook${queryString}`
+  const pageUrl = `${canonicalSiteUrl}/facebook${queryString}`
   const imageUrl = new URL('/facebook/og.png', siteUrl)
 
   url.searchParams.forEach((value, key) => {
