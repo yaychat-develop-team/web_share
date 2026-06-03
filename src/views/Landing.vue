@@ -1,7 +1,8 @@
 <template>
-  <main class="min-h-screen pb-[130px] overflow-x-hidden bg-[#250064] font-['Poppins',Arial,sans-serif] text-white">
+  <div class="min-h-screen bg-[#330D6A]">
+  <main class="landing-max-width ignore-px relative mx-auto min-h-screen w-full pb-[130px] overflow-x-hidden bg-[#250064] font-['Poppins',Arial,sans-serif] text-white">
     <ResponsiveImg
-      class="absolute left-0 top-0 z-1 w-screen object-cover aspect-375/473"
+      class="absolute left-0 top-0 z-1 w-full object-cover aspect-375/473"
       name="landing/hero"
       alt=""
       :lazy="false"
@@ -148,7 +149,11 @@
         <p class="text-[12px] font-medium leading-[16px] text-[rgba(255,255,255,0.8)]">Join Us and Become the Next Voice Chat Star</p>
       </section>
 
-      <div v-if="brandName === 'Oumi'" class="fixed bottom-0 left-0 z-[9999] h-[120px] w-screen p-[12px_16px_0_16px] bg-[#461791]">
+      <div
+        v-if="brandName === 'Oumi'"
+        class="landing-max-width ignore-px fixed bottom-0 left-1/2 z-[9999] h-[120px] w-full -translate-x-1/2 p-[12px_16px_0_16px] bg-[#461791] transition-opacity duration-300 ease-out"
+        :class="isScrolling ? 'opacity-0 pointer-events-none' : 'opacity-100'"
+      >
         <div class="flex w-full items-center gap-[11px] mb-[16px]">
           <div
             class="flex h-[54px] min-w-0 flex-1 basis-0 items-center justify-center rounded-[12px] bg-black text-[13px] font-semibold leading-[20px] text-white no-underline border border-white"
@@ -180,7 +185,11 @@
         </div>
       </div>
 
-      <div v-if="brandName === 'Yaychat'" class="fixed bottom-0 left-0 z-[9999] h-[90px] w-screen p-[16px_16px_0_16px] bg-[#461791]">
+      <div
+        v-if="brandName === 'Yaychat'"
+        class="landing-max-width ignore-px fixed bottom-0 left-1/2 z-[9999] h-[90px] w-full -translate-x-1/2 p-[16px_16px_0_16px] bg-[#461791] transition-opacity duration-300 ease-out"
+        :class="isScrolling ? 'opacity-0 pointer-events-none' : 'opacity-100'"
+      >
         <div class="flex w-full items-center gap-x-[11px] mb-[16px]">
           <div
             class="flex h-[54px] min-w-0 flex-1 basis-0 items-center justify-center gap-[4px] rounded-[12px] bg-black text-[13px] font-semibold leading-[20px] text-white no-underline border border-white"
@@ -208,6 +217,7 @@
       </div>
     </section>
   </main>
+  </div>
 </template>
 
 <script setup lang="ts">
@@ -216,7 +226,7 @@ import ProofCarousel from '@/components/ProofCarousel.vue'
 import SvgIcon from '@/components/SvgIcon.vue'
 import checkSvg from '@/assets/svg/landing/check.svg'
 import { ta } from '@/utils/thinkingdata'
-import { onMounted } from 'vue'
+import { onBeforeUnmount, onMounted, ref } from 'vue'
 
 const featurePills = [
   'Flexible schedule',
@@ -302,6 +312,21 @@ const brandName = typeof window !== 'undefined' && window.location.hostname.incl
   ? 'Oumi'
   : 'Yaychat'
 
+const isScrolling = ref(false)
+let scrollEndTimer: ReturnType<typeof window.setTimeout> | undefined
+
+const handleScroll = () => {
+  isScrolling.value = true
+
+  if (scrollEndTimer) {
+    window.clearTimeout(scrollEndTimer)
+  }
+
+  scrollEndTimer = window.setTimeout(() => {
+    isScrolling.value = false
+  }, 400)
+}
+
 const downloadUrl = (type: 'google' | 'ios' | 'official') => {
   if (brandName === 'Oumi') {
     switch (type) {
@@ -347,6 +372,7 @@ const copyInviteCode = async () => {
 }
 
 const download = async (type: 'google' | 'ios' | 'official') => {
+  if (isScrolling.value) return
   ta.track('gs_share_show', {
     type,
   })
@@ -355,7 +381,21 @@ const download = async (type: 'google' | 'ios' | 'official') => {
 }
 
 onMounted(() => {
+  window.addEventListener('scroll', handleScroll, { passive: true })
   ta.track('gs_share_show')
 })
 
+onBeforeUnmount(() => {
+  window.removeEventListener('scroll', handleScroll)
+  if (scrollEndTimer) {
+    window.clearTimeout(scrollEndTimer)
+  }
+})
+
 </script>
+
+<style scoped>
+.landing-max-width.ignore-px {
+  max-width: 1080px;
+}
+</style>

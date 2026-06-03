@@ -58,17 +58,19 @@ const rawSvgContent = computed(() => rawSvgsByName.get(normalizedName.value) ?? 
 /**
  * postcss-px-to-viewport 只处理 CSS 块里的 px，无法转换运行时通过 :style / v-html
  * 注入的 px。这里手工做一次等价换算，与 vite.config.ts 的 viewportOptions 保持同步：
- * - 基线视口宽度 375、精度 5 位
+ * - 基线视口宽度 375、最大视口宽度 1080、精度 5 位
  * - |px| <= 1 时保留原值（避免极小尺寸被换算成 0）
  */
 const VIEWPORT_WIDTH = 375
+const MAX_VIEWPORT_WIDTH = 1080
 const UNIT_PRECISION = 5
 const MIN_PIXEL_VALUE = 1
 
 function pxToVw(px: number): string {
   if (!Number.isFinite(px) || Math.abs(px) <= MIN_PIXEL_VALUE) return `${px}px`
   const vw = Number(((px / VIEWPORT_WIDTH) * 100).toFixed(UNIT_PRECISION))
-  return `${vw}vw`
+  const maxPx = Number(((px / VIEWPORT_WIDTH) * MAX_VIEWPORT_WIDTH).toFixed(UNIT_PRECISION))
+  return px < 0 ? `clamp(${maxPx}px, ${vw}vw, 0px)` : `clamp(0px, ${vw}vw, ${maxPx}px)`
 }
 
 /** 匹配字符串里的 px 值（含小数 / 负数），用于把 "24px" / "calc(100% - 8px)" 中的 px 转 vw */

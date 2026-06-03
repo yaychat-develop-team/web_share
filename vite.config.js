@@ -4,6 +4,7 @@ import tailwindcss from '@tailwindcss/postcss';
 import { fileURLToPath, URL } from 'node:url';
 const viewportOptions = {
     viewportWidth: 375,
+    maxViewportWidth: 1080,
     unitPrecision: 5,
     viewportUnit: 'vw',
     selectorBlackList: ['.ignore-px'],
@@ -15,22 +16,52 @@ function pxToViewport(options) {
     const shouldIgnoreSelector = (selector) => {
         return options.selectorBlackList.some((item) => selector.includes(item));
     };
-    const transformValue = (value) => {
-        return value.replace(pxRegExp, (match, pixelValue) => {
+    const transformValue = (value, targetWidth, targetUnit) => {
+        let transformed = false;
+        const nextValue = value.replace(pxRegExp, (match, pixelValue) => {
             const pixels = Number.parseFloat(pixelValue);
             if (!Number.isFinite(pixels) || Math.abs(pixels) <= options.minPixelValue)
                 return match;
-            const viewportValue = Number.parseFloat(((pixels / options.viewportWidth) * 100).toFixed(options.unitPrecision));
-            return `${viewportValue}${options.viewportUnit}`;
+            transformed = true;
+            const targetValue = Number.parseFloat(((pixels / options.viewportWidth) * targetWidth).toFixed(options.unitPrecision));
+            return `${targetValue}${targetUnit}`;
         });
+        return { value: nextValue, transformed };
+    };
+    const toViewportValue = (value) => transformValue(value, 100, options.viewportUnit);
+    const toMaxPixelValue = (value) => transformValue(value, options.maxViewportWidth, 'px');
+    const createMaxViewportRule = (decl) => {
+        const parent = decl.parent;
+        if (!parent?.clone)
+            return undefined;
+        const maxDecl = decl.clone({ value: toMaxPixelValue(decl.value).value });
+        maxDecl.__pxToViewportMax = true;
+        return {
+            type: 'atrule',
+            name: 'media',
+            params: `(min-width: ${options.maxViewportWidth}px)`,
+            nodes: [parent.clone({ nodes: [maxDecl] })],
+        };
+    };
+    const shouldSkipDeclaration = (decl) => {
+        if (decl.__pxToViewportMax)
+            return true;
+        const selector = decl.parent?.selector;
+        return Boolean(selector && shouldIgnoreSelector(selector));
     };
     return {
         postcssPlugin: 'postcss-px-to-viewport-in-tailwind-layers',
         Declaration(decl) {
-            const selector = decl.parent?.selector;
-            if (selector && shouldIgnoreSelector(selector))
+            if (shouldSkipDeclaration(decl))
                 return;
-            decl.value = transformValue(decl.value);
+            const viewportResult = toViewportValue(decl.value);
+            if (!viewportResult.transformed)
+                return;
+            const maxViewportRule = createMaxViewportRule(decl);
+            decl.value = viewportResult.value;
+            if (maxViewportRule) {
+                decl.parent?.after(maxViewportRule);
+            }
         },
     };
 }
