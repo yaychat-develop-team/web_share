@@ -373,7 +373,7 @@ const copyInviteCode = async () => {
 
 const download = async (type: 'google' | 'ios' | 'official') => {
   if (isScrolling.value) return
-  ta.track('gs_share_show', {
+  ta.track('gs_share_download', {
     type,
   })
   await copyInviteCode()
