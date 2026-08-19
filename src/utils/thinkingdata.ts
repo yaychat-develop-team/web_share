@@ -26,4 +26,8 @@ const config: ThinkingDataInitConfig = {
 
 thinkingdata.init(config)
 
+thinkingdata.setSuperProperties({
+  x_region: import.meta.env.VITE_THINKINGDATA_REGION || 'us',
+})
+
 export const ta = thinkingdata
